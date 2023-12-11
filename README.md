@@ -2,9 +2,9 @@
   <img src="https://avatars.githubusercontent.com/u/152215067?s=200&v=4" height="80">
 </p>
 
-# LabsMobile-Laravel
+# LabsMobile-PHP
 
-![](https://img.shields.io/badge/version-3.1.1-blue.svg)
+![](https://img.shields.io/badge/version-1.0.1-blue.svg)
  
 XXXXXXX
 

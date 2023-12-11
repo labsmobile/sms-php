@@ -1,8 +1,21 @@
 {
     "name": "labsmobile/sms-php",
-    "description": "Sms PHP",
+    "description": "Send SMS messages through the LabsMobile platform and the PHP library.",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+      "php",
+      "composer",
+      "sms",
+      "httpclient",
+      "sms-api",
+      "sms-messages",
+      "sms-client",
+      "sms-notifications",
+      "smsapi",
+      "sms-php",
+      "labsmobile"
+    ],
     "autoload": {
         "psr-4": {
             "Labsmobile\\SmsPhp\\": "src/"
@@ -15,7 +28,9 @@
     },
     "authors": [
         {
-            "name": "LabsMobile"
+            "name": "LabsMobile",
+            "email": "support@labsmobile.com",
+            "homepage": "https://www.labsmobile.com/"
         }
     ],
     "require-dev": {
