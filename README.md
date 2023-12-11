@@ -6,7 +6,7 @@
 
 ![](https://img.shields.io/badge/version-1.0.1-blue.svg)
  
-XXXXXXX
+Send SMS messages through the LabsMobile platform and the PHP library.
 
 ## Documentation
 
@@ -15,10 +15,14 @@ XXXXXXX
 
 ## Features
 - Send SMS messages.
+- Get account credits
+- Get prices by country
+- Manage scheduled sendings
+- HLR Request (Check mobile)
 
 ## Requirements
 
-xxxx
+- A user account with LabsMobile. Click on the link to create an account [here][signUp].
 
 ## Installation
 
