@@ -1,0 +1,29 @@
+{
+    "name": "labsmobile/sms-php",
+    "description": "Sms PHP",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Labsmobile\\SmsPhp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+      "psr-4": {
+          "Labsmobile\\SmsPhp\\Tests\\": "tests/"
+      }
+    },
+    "authors": [
+        {
+            "name": "LabsMobile"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "require": {
+        "php": "^7.0.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "ext-json": "*"
+    }
+}
