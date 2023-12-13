@@ -221,7 +221,6 @@ class LabsMobileClient
       }
       $bodyResponse = $response->getBody();
       $json = json_decode($bodyResponse);
-      echo json_encode($json);
       if ($json->code != 0) {
         throw new RestException($json->message, $json->code);
       }

@@ -23,10 +23,152 @@ Send SMS messages through the LabsMobile platform and the PHP library.
 ## Requirements
 
 - A user account with LabsMobile. Click on the link to create an account [here][signUp].
+- This library supports PHP:
+  - PHP 7.2
+  - PHP 7.3
+  - PHP 7.4
+  - PHP 8.0
+  - PHP 8.1
+  - PHP 8.2
+  - PHP 8.3
 
 ## Installation
 
-xxxx
+To install the labsmobile/sms-php library, it is recommended to use composer.
+
+### Installation command
+
+```
+composer require labsmobile/sms-php
+```
+
+### Installation by modifying the composer.json file
+
+```
+"require": {
+	"labsmobile/sms-php": "1.0.1"
+}
+```
+
+## Examples of use cases
+
+**Send SMS**
+
+Here is an example of using the library to send a SMS:
+
+```php
+  public $username = 'myusername';
+  public $token = 'mytoken';
+
+  public function testSms()
+  { 
+    try {
+      $message = 'Test SMS';
+      $phone = ['34XXXXXXXXX'];
+      $labsMobileClient = new LabsMobileClient($this->username, $this->token);
+      $bodySms = new LabsMobileModelTextMessage($phone,$message);
+      $labsMobileClient = $labsMobileClient->sendSms($bodySms);
+      $body = $labsMobileClient->getBody();
+      $json = json_decode($body);
+      self::assertSame('0',$json->code);
+    } catch (RestException $exception) {
+      self::assertSame('Error', $exception->getStatus() ." ". $exception->getMessage());
+    }
+  }
+```
+**Get account credits**
+
+Here is an example to learn credits for an existing account:
+
+```php
+  public $username = 'myusername';
+  public $token = 'mytoken';
+
+  public function testGetCredits()
+  {
+    try{
+      $labsMobileClient = new LabsMobileClient($this->username, $this->token);
+      $response = $labsMobileClient->getCredit();
+      $body = $response->getBody();
+      $json = json_decode($body);
+      self::assertSame(0,$json->code);
+    } catch(RestException $exception) {
+      self::assertSame('Error', $exception->getStatus() ." ". $exception->getMessage());
+    }
+  }
+```
+**Manage scheduled sendings**
+
+Here is an example you can cancel or execute the scheduled sendings that are pending for execution:
+
+```php
+  public $username = 'myusername';
+  public $token = 'mytoken';
+
+  public function testScheduledSendings() 
+  {
+    try {
+      $subid="XXXXXXXXXX";
+      $cmd="XXXX";
+      $labsMobileClient = new LabsMobileClient($this->username, $this->token);
+      $bodyScheduled = new LabsMobileModelScheduledSendings($subid, $cmd);
+      $labsMobileClient = $labsMobileClient->scheduledSendings($bodyScheduled);
+      $body = $labsMobileClient->getBody();
+      $json = json_decode($body);
+      self::assertSame(0,$json->code);
+    } catch (RestException $exception) {
+      self::assertSame('Error', $exception->getStatus() ." ". $exception->getMessage());
+    }
+  }
+```
+
+**Get prices by country**
+
+Here is an example  to know the credits that a single sending will take depending on the country of delivery:
+
+```php
+  public $username = 'myusername';
+  public $token = 'mytoken';
+
+  public function testCountryPrice()
+  {
+    try {
+      $countries = ["CO","ES"];
+      $labsMobileClient = new LabsMobileClient($this->username, $this->token);
+      $bodyContries = new LabsMobileModelCountryPrice($countries);
+      $labsMobileClient = $labsMobileClient->getpricesCountry($bodyContries);
+      $body = $labsMobileClient->getBody();
+      self::assertTrue(true, $body);
+    } catch (RestException $exception) {
+      self::assertSame('Error', $exception->getStatus() ." ". $exception->getMessage());
+    }
+    
+  }
+```
+
+**HLR Request**
+
+Here is an example queries the mobile phone status with the related information like current operator, format, active, ported information, subscription country, etc:
+
+```php
+public $username = 'myusername';
+  public $token = 'mytoken';
+
+  public function testHlr()
+  {
+    try {
+      $numbers = [573058156514];
+      $labsMobileClient = new LabsMobileClient($this->username, $this->token);
+      $bodyHlr = new LabsMobileModelHlrRequest(json_encode($numbers));
+      $labsMobileClient = $labsMobileClient->hlrRequest($bodyHlr);
+      $body = $labsMobileClient->getBody();
+      $json = json_decode($body);
+      self::assertSame('ok', $json->result);
+    } catch (RestException $exception) {
+      self::assertSame('Error', $exception->getStatus() ." ". $exception->getMessage());
+    }
+  }
+```
 
 ## Help
 
