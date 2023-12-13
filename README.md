@@ -34,7 +34,7 @@ Send SMS messages through the LabsMobile platform and the PHP library.
 
 ## Installation
 
-To install the labsmobile/sms-php library, it is recommended to use composer.
+To install the [labsmobile/sms-php][packages] library, it is recommended to use [composer][getcomposer].
 
 ### Installation command
 
@@ -176,3 +176,5 @@ If you have questions, you can contact us through the support chat or through th
 
 [apidocs]: https://apidocs.labsmobile.com/
 [signUp]: https://www.labsmobile.com/en/signup
+[packages]: https://packagist.org/packages/labsmobile/sms-php
+[getcomposer]: https://getcomposer.org/
