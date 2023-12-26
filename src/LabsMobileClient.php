@@ -2,27 +2,27 @@
 
 namespace Labsmobile\SmsPhp;
 
-use GuzzleHttp\BodySummarizer;
 use Labsmobile\SmsPhp\LabsMobileModelTextMessage;
 use Labsmobile\SmsPhp\LabsMobileModelCountryPrice;
 use Labsmobile\SmsPhp\LabsMobileModelScheduledSendings;
 use Labsmobile\SmsPhp\LabsMobileModelHlrRequest;
-
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Ring\Client\CurlHandler;
-
 use Labsmobile\SmsPhp\Exception\ParametersException;
 use Labsmobile\SmsPhp\Exception\LabsMobileException;
 use Labsmobile\SmsPhp\Exception\RestException;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Psr7\Response;
+
+
+
 
 class LabsMobileClient
 {
   protected $token;
   protected $username;
   protected $body;
-  protected $optionalParams;
   protected $urlBase = 'https://api.labsmobile.com';
 
   public function __construct($username, $token)
@@ -80,24 +80,33 @@ class LabsMobileClient
   }
 
   /**
-   * Get the value of opcParameter
-   */
-  public function getOptionalParams()
-  {
-    return $this->optionalParams;
-  }
-
-  /**
    * Send a SMS.
    * 
    * @param LabsMobileModelTextMessage $textMessage this object contains the SMS data. See LabsMobileModelTextMessage class.
    * 
    * @return Response $response response object
    */
-  public function sendSms(LabsMobileModelTextMessage $body): \GuzzleHttp\Psr7\Response
+  public function sendSms(LabsMobileModelTextMessage $body)
   {
     $response = null;
     $bodySms = [];
+    $msisdn = $body->getMsisdn();
+    $message = $body->getMessage();
+    $tpoa = $body->getTpoa();
+    $subid = $body->getSubid();
+    $label = $body->getLabel();
+    $test = $body->getTest();
+    $ackurl = $body->getAckurl();
+    $shortlink = $body->getShortlink();
+    $clickurl = $body->getClickurl();
+    $scheduled = $body->getScheduled();
+    $crt = $body->getCrt();
+    $crt_id = $body->getCrt_id();
+    $crt_name = $body->getCrt_name();
+    $ucs2 = $body->getUcs2();
+    $nofilter = $body->getNofilter();
+    $parameters = $body->getParameters();
+
     try {
       if ($this->username == null) {
         error_log("Error: Username is required - log");
@@ -107,75 +116,89 @@ class LabsMobileClient
         error_log("Error: Token is required - log");
         throw new ParametersException("Error: Token is required");
       }
-      if ($body->getMsisdn() != null && !empty($body->getMsisdn())) {
+      if ($msisdn != null && !empty($msisdn)) {
         $recipients = [];
-        foreach ($body->getMsisdn() as $phone) {
+        foreach ($msisdn as $phone) {
           $recipients[] = ['msisdn' => $phone];
         }
         $bodySms["recipient"] = $recipients;
       }
-      if ($body->getMessage() != null && !empty($body->getMessage())) {
-        $bodySms["message"] = $body->getMessage();
+      if ($message != null && !empty($message)) {
+        $bodySms["message"] = $message;
       }
-      if ($body->getTpoa() != null && !empty($body->getTpoa())) {
-        $bodySms["tpoa"] = $body->getTpoa();
+      if ($tpoa != null && !empty($tpoa)) {
+        $bodySms["tpoa"] = $tpoa;
       }
-      if ($body->getSubid() != null && !empty($body->getSubid())) {
-        $bodySms["subid"] = $body->getSubid();
+      if ($subid != null && !empty($subid)) {
+        $bodySms["subid"] = $subid;
       }
-      if ($body->getLabel() != null && !empty($body->getLabel())) {
-        $bodySms["label"] = $body->getLabel();
+      if ($label != null && !empty($label)) {
+        $bodySms["label"] = $label;
       }
-      if ($body->getTest() != null && !empty($body->getTest())) {
-        $bodySms["test"] = $body->getTest();
+      if ($test != null && !empty($test)) {
+        $bodySms["test"] = $test;
       }
-      if ($body->getAckurl() != null && !empty($body->getAckurl())) {
-        $bodySms["ackurl"] = $body->getAckurl();
+      if ($ackurl != null && !empty($ackurl)) {
+        $bodySms["ackurl"] = $ackurl;
       }
-      if ($body->getShortlink() != null && !empty($body->getShortlink())) {
-        $bodySms["shortlink"] = $body->getShortlink();
+      if ($shortlink != null && !empty($shortlink)) {
+        $bodySms["shortlink"] = $shortlink;
       }
-      if ($body->getClickurl() != null && !empty($body->getClickurl())) {
-        $bodySms["clickurl"] = $body->getClickurl();
+      if ($clickurl != null && !empty($clickurl)) {
+        $bodySms["clickurl"] = $clickurl;
       }
-      if ($body->getScheduled() != null && !empty($body->getScheduled())) {
-        $bodySms["scheduled"] = $body->getScheduled();
+      if ($scheduled != null && !empty($scheduled)) {
+        $bodySms["scheduled"] = $scheduled;
       }
-      if ($body->getCrt() != null && !empty($body->getCrt())) {
-        $bodySms["crt"] = $body->getCrt();
+      if ($crt != null && !empty($crt)) {
+        $bodySms["crt"] = $crt;
       }
-      if ($body->getCrt_id() != null && !empty($body->getCrt_id())) {
-        $bodySms["crt_id"] = $body->getCrt_id();
+      if ($crt_id != null && !empty($crt_id)) {
+        $bodySms["crt_id"] = $crt_id;
       }
-      if ($body->getCrt_name() != null && !empty($body->getCrt_name())) {
-        $bodySms["crt_name"] = $body->getCrt_name();
+      if ($crt_name != null && !empty($crt_name)) {
+        $bodySms["crt_name"] = $crt_name;
       }
-      if ($body->getUcs2() != null && !empty($body->getUcs2())) {
-        $bodySms["ucs2"] = $body->getUcs2();
+      if ($ucs2 != null && !empty($ucs2)) {
+        $bodySms["ucs2"] = $ucs2;
       }
-      if ($body->getNofilter() != null && !empty($body->getNofilter())) {
-        $bodySms["nofilter"] = $body->getNofilter();
+      if ($nofilter != null && !empty($nofilter)) {
+        $bodySms["nofilter"] = $nofilter;
       }
-      if ($body->getParameters() != null && !empty($body->getParameters())) {
-        $bodySms["parameters"] = $body->getParameters();
+      if ($parameters != null && !empty($parameters)) {
+        $bodySms["parameters"] = $parameters;
       }
       try {
         $token = $this->getToken();
         $username = $this->getUsername();
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request(
-          'POST',
-          $this->urlBase . '/json/send',
-          [
-            'headers' => [
-              'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
-              'Cache-Control' => 'no-cache',
-              'Content-Type' => 'application/json',
-            ],
-            'json' => [$bodySms]
-          ]
-        );
-      } catch (\GuzzleHttp\Exception\ClientException $exception) {
+        $client = new Client();
+        if (method_exists($client, 'request')) {
+          $response = $client->request(
+            'POST',
+            $this->urlBase . '/json/send',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ],
+              'json' => [$bodySms]
+            ]
+          );
+        } else {
+          $response = $client->post(
+            $this->urlBase . '/json/send',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ],
+              'json' => [$bodySms]
+            ]
+          );
+        }
+      } catch (ClientException $exception) {
         $response = $exception->getResponse();
       }
       $bodyResponse = $response->getBody();
@@ -204,19 +227,32 @@ class LabsMobileClient
       try {
         $token = $this->getToken();
         $username = $this->getUsername();
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request(
-          'GET',
-          $this->urlBase . '/json/balance',
-          [
-            'headers' => [
-              'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
-              'Cache-Control' => 'no-cache',
-              'Content-Type' => 'application/json',
+        $client = new Client();
+        if (method_exists($client, 'request')) {
+          $response = $client->request(
+            'GET',
+            $this->urlBase . '/json/balance',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ]
             ]
-          ]
-        );
-      } catch (\GuzzleHttp\Exception\ClientException $exception) {
+          );
+        } else {
+          $response = $client->get(
+            $this->urlBase . '/json/balance',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ]
+            ]
+          );
+        }
+      } catch (ClientException $exception) {
         $response = $exception->getResponse();
       }
       $bodyResponse = $response->getBody();
@@ -232,7 +268,8 @@ class LabsMobileClient
 
   public function getpricesCountry(LabsMobileModelCountryPrice $body)
   {
-    $countries = !empty($body->getPrice()) ? $body->getPrice() : null;
+    $price= $body->getPrice();
+    $countries = !empty($price) ? $price : null;
     $response = null;
     try {
       if ($this->username == null) {
@@ -246,23 +283,40 @@ class LabsMobileClient
       try {
         $token = $this->getToken();
         $username = $this->getUsername();
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request(
-          'POST',
-          $this->urlBase . '/json/prices',
-          [
-            'headers' => [
-              'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
-              'Cache-Control' => 'no-cache',
-              'Content-Type' => 'application/json',
-            ],
-            'json' => [
-              'countries' => $countries
-  
+        $client = new Client();
+        if (method_exists($client, 'request')) {
+          $response = $client->request(
+            'POST',
+            $this->urlBase . '/json/prices',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ],
+              'json' => [
+                'countries' => $countries
+    
+              ]
             ]
-          ]
-        );
-      } catch (\GuzzleHttp\Exception\ClientException $exception) {
+          );
+        } else {
+          $response = $client->post(
+            $this->urlBase . '/json/prices',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ],
+              'json' => [
+                'countries' => $countries
+    
+              ]
+            ]
+          );
+        }
+      } catch (ClientException $exception) {
         $response = $exception->getResponse();
       }
       $bodyResponse = $response->getBody();
@@ -293,23 +347,40 @@ class LabsMobileClient
       try {
         $token = $this->getToken();
         $username = $this->getUsername();
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request(
-          'POST',
-          $this->urlBase . '/json/scheduled',
-          [
-            'headers' => [
-              'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
-              'Cache-Control' => 'no-cache',
-              'Content-Type' => 'application/json',
-            ],
-            'json' => [
-              'subid' => $subid,
-              'cmd' => $cmd
+        $client = new Client();
+        if (method_exists($client, 'request')) {
+          $response = $client->request(
+            'POST',
+            $this->urlBase . '/json/scheduled',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ],
+              'json' => [
+                'subid' => $subid,
+                'cmd' => $cmd
+              ]
             ]
-          ]
-        );
-      } catch (\GuzzleHttp\Exception\ClientException $exception) {
+          );
+        } else {
+          $response = $client->post(
+            $this->urlBase . '/json/scheduled',
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+              ],
+              'json' => [
+                'subid' => $subid,
+                'cmd' => $cmd
+              ]
+            ]
+          );
+        }
+      } catch (ClientException $exception) {
         $response = $exception->getResponse();
       }
       $bodyResponse = $response->getBody();
@@ -339,18 +410,30 @@ class LabsMobileClient
       try {
         $token = $this->getToken();
         $username = $this->getUsername();
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request(
-          'GET',
-          $this->urlBase . '/hlr/?numbers=' . $numbers,
-          [
-            'headers' => [
-              'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
-              'Cache-Control' => 'no-cache',
+        $client = new Client();
+        if (method_exists($client, 'request')) {
+          $response = $client->request(
+            'GET',
+            $this->urlBase . '/hlr/?numbers=' . $numbers,
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+              ]
             ]
-          ]
-        );
-      } catch (\GuzzleHttp\Exception\ServerException $exception) {
+          );
+        } else {
+          $response = $client->get(
+            $this->urlBase . '/hlr/?numbers=' . $numbers,
+            [
+              'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($username . ':' . $token),
+                'Cache-Control' => 'no-cache',
+              ]
+            ]
+          );
+        }
+      } catch (ServerException $exception) {
         $response = $exception->getResponse();
       }
       $bodyResponse = $response->getBody();

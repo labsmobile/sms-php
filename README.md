@@ -23,14 +23,8 @@ Send SMS messages through the LabsMobile platform and the PHP library.
 ## Requirements
 
 - A user account with LabsMobile. Click on the link to create an account [here][signUp].
-- This library supports PHP:
-  - PHP 7.2
-  - PHP 7.3
-  - PHP 7.4
-  - PHP 8.0
-  - PHP 8.1
-  - PHP 8.2
-  - PHP 8.3
+- This library supports php v5.4 and higher versions of php.
+- From php v5.4 to php v 7.1 it is recommended to use Composer 2.2.22.
 
 ## Installation
 
