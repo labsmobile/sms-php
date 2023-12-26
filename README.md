@@ -24,7 +24,7 @@ Send SMS messages through the LabsMobile platform and the PHP library.
 
 - A user account with LabsMobile. Click on the link to create an account [here][signUp].
 - This library supports php v5.4 and higher versions of php.
-- From php v5.4 to php v 7.1 it is recommended to use Composer 2.2.22.
+- From php v5.4 to php v7.1 it is recommended to use [Composer 2.2.22][getcomposerdownload].
 
 ## Installation
 
@@ -172,3 +172,4 @@ If you have questions, you can contact us through the support chat or through th
 [signUp]: https://www.labsmobile.com/en/signup
 [packages]: https://packagist.org/packages/labsmobile/sms-php
 [getcomposer]: https://getcomposer.org/
+[getcomposerdownload]: https://getcomposer.org/download/
