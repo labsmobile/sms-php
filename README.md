@@ -4,7 +4,7 @@
 
 # LabsMobile-PHP
 
-![](https://img.shields.io/badge/version-1.0.1-blue.svg)
+![](https://img.shields.io/badge/version-1.0.2-blue.svg)
  
 Send SMS messages through the LabsMobile platform and the PHP library.
 
@@ -40,7 +40,7 @@ composer require labsmobile/sms-php
 
 ```
 "require": {
-	"labsmobile/sms-php": "1.0.1"
+	"labsmobile/sms-php": "1.0.2"
 }
 ```
 
