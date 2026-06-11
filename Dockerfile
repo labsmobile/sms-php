@@ -3,13 +3,13 @@ FROM php:8.3-cli
 
 # Download and install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
-    php -r "unlink('composer-setup.php');"
+  php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+  php -r "unlink('composer-setup.php');"
 
 # Install the zip extension
 RUN apt-get update \
-    && apt-get install -y libzip-dev zip \
-    && docker-php-ext-install zip
+  && apt-get install -y libzip-dev zip \
+  && docker-php-ext-install zip
 
 # Install the zip extension for alpine linux distributions
 #RUN apk update && \
@@ -27,6 +27,9 @@ RUN composer install
 
 # Copy the rest of your application to the container
 COPY . .
+
+RUN useradd -U -u 1000 appuser && chown -R 1000:1000 /app
+USER 1000
 
 # Default command to run when container starts
 CMD ["php", "index.php"]
