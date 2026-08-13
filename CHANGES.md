@@ -4,7 +4,7 @@ This file contains the version history and relevant changes for this project.
 
 The project uses the `MAJOR.MINOR.PATCH` versioning scheme.
 
-## [1.0.2] - 2023-12-26
+## [1.0.2] - 2025-03-13
 
 **Type:** MINOR
 
